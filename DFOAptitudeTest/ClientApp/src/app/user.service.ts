@@ -24,13 +24,14 @@ export class UserService {
       tap((value) => of(value)),
       catchError(this.handleError));
   }
-  update(user: User) {
-    return this._http.put(this._baseUrl + "api/users/update/" + user.id, user).pipe(
-      catchError(this.handleError));
-  }
-  create(user: User) {
-    return this._http.post(this._baseUrl + "api/users/add", user).pipe(
-      catchError(this.handleError));
+  createOrUpdate(user: User) {
+    if (user.id == 0) {
+      return this._http.post(this._baseUrl + "api/users/add", user).pipe(
+        catchError(this.handleError));
+    } else {
+      return this._http.put(this._baseUrl + "api/users/update/" + user.id, user).pipe(
+        catchError(this.handleError));
+    }
   }
   private handleError(error) {
     console.error(error);

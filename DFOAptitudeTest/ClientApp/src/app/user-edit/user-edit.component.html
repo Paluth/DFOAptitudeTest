@@ -1,4 +1,5 @@
 <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <h1>{{ tittle }}</h1>
   <div class="form-group">
     <label for="id">Id</label>
     <input type="text" class="form-control" id="id" readonly formControlName="id">
@@ -6,14 +7,30 @@
   <div class="form-group">
     <label for="name">Name</label>
     <input type="text" class="form-control" id="name" placeholder="Name" formControlName="name">
+    <div class="alert alert-danger" *ngIf="!userForm.get('name').valid && (userForm.get('name').dirty || userForm.get('name').touched)">
+      <div *ngIf="userForm.get('name').hasError('required') && (userForm.get('name').dirty || userForm.get('name').touched || submitted)">
+        Name is a required field
+      </div>
+      <div *ngIf="userForm.get('name').hasError('maxlength') && (userForm.get('name').dirty || userForm.get('name').touched || submitted)">
+        Name is too long. Max 50 characters.
+      </div>
+    </div>
   </div>
   <div class="form-group">
     <label for="age">Age</label>
     <input type="text" class="form-control" id="age" placeholder="Age" formControlName="age">
+    <div class="alert alert-danger" *ngIf="!userForm.get('age').valid && (userForm.get('age').dirty || userForm.get('age').touched)">
+      <div *ngIf="userForm.get('age').hasError('required') && (userForm.get('age').dirty || userForm.get('age').touched || submitted)">
+        Age is a required field
+      </div>
+      <div *ngIf="userForm.get('age').hasError('pattern') && (userForm.get('age').dirty || userForm.get('age').touched || submitted)">
+        Age is invalid.
+      </div>
+    </div>
   </div>
   <div class="form-group">
     <label for="adress">Adress</label>
     <input type="text" class="form-control" id="adress" placeholder="Adress" formControlName="adress">
   </div>
-  <button type="submit" class="btn btn-primary" [disabled]="userForm.touched || userForm.dirty">Save</button>
+  <button type="submit" class="btn btn-primary" [disabled]="!(userForm.touched || userForm.dirty)">Save</button>
 </form>
