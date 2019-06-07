@@ -32,16 +32,21 @@ export class UsersComponent implements OnInit {
     }
   }
   private updateUsers() {
-    this.service.getAll().subscribe((value) => { this.allUsers = value; this.users = this.allUsers; });
+    this.service.getAll().subscribe((value) => {
+      this.allUsers = value;
+      console.debug(this.allUsers);
+      this.users = this.allUsers;
+      console.debug(this.users);
+    });
   }
   ngOnInit() {
-    this._route.queryParams.pipe(
-      filter((params) => params.update)
-    ).subscribe((param) => {
-      if (param.update == 'true') {
-        this.updateUsers();
-      }
-    })
+    //this._route.queryParams.pipe(
+    //  filter((params) => params.update)
+    //).subscribe((param) => {
+    //  if (param.update == 'true') {
+    //    this.updateUsers();
+    //  }
+    //})
   }
 
 }
