@@ -22,8 +22,12 @@ namespace DFOAptitudeTest.Controllers
 
         // GET: api/Users/list
         [HttpGet("list")]
-        public IEnumerable<User> GetUsers()
-        {
+        public IEnumerable<User> GetUsers() {
+            if (!_context.Users.Any()) {
+                var user = new Models.User() { Id = 5, Name = "zeh", Age = 35, Adress = "any street" };
+                _context.Users.Add(user);
+                _context.SaveChanges();
+            }
             return _context.Users;
         }
 
