@@ -23,8 +23,7 @@ import { HomeComponent } from './home/home.component';
     ReactiveFormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'user', component: UsersComponent },
-      { path: 'edit-user', component: UsersComponent },
+      { path: 'users', component: UsersComponent }
     ])
   ],
   providers: [],
