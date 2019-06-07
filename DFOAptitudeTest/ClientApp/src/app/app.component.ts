@@ -9,8 +9,7 @@ import { UserService } from './user.service';
 export class AppComponent {
   title = 'ClientApp';
   constructor(private service: UserService) {
-    var users;
-    this.service.getUsers().subscribe((value) => { console.debug(value); users = value });
+    this.service.getUsers().subscribe((value) => { console.debug(value) });
     this.service.getById(5).subscribe((value) => { console.debug(value) });
   }
 }
