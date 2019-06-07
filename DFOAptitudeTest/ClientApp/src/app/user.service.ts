@@ -12,7 +12,7 @@ export class UserService {
 
   constructor(private _http: HttpClient, @Inject('BASE_URL') private _baseUrl: string) { }
 
-  getUsers(): Observable<User[]> {
+  getAll(): Observable<User[]> {
     return this._http.get(this._baseUrl + "api/users/list").pipe(
       map((data) => <User[]>data),
       tap((userData) => this.users = of(userData)),
@@ -22,6 +22,14 @@ export class UserService {
     return this._http.get(this._baseUrl + "api/users/get/" + id).pipe(
       map((data) => <User>data),
       tap((value) => of(value)),
+      catchError(this.handleError));
+  }
+  update(user: User) {
+    return this._http.put(this._baseUrl + "api/users/update/" + user.id, user).pipe(
+      catchError(this.handleError));
+  }
+  create(user: User) {
+    return this._http.post(this._baseUrl + "api/users/add", user).pipe(
       catchError(this.handleError));
   }
   private handleError(error) {
