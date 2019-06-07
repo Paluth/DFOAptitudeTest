@@ -27,7 +27,8 @@ import { UserService } from './user.service';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'users', component: UsersComponent },
-      { path: 'user-edit', component: UserService }
+      { path: 'user-edit/:id', component: UserEditComponent },
+      { path: 'user-edit', component: UserEditComponent }
     ])
   ],
   providers: [],
