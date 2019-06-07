@@ -1,8 +1,16 @@
 <h1>List of Users</h1>
 
-<p *ngIf="(users| async)?.length > 0"><em>Click on the User's Id to edit the User.</em></p>
+<div *ngIf="users.length > 0">
+  <p><em>Click on the User's Id to edit the User.</em></p>
+  <p><em>To reset the search, clear the Name field and click the Filter button.</em></p>
+</div>
+<div class="form-group">
+  <label for="partialName">Name</label>
+  <input type="text" [(ngModel)]="nameFilter" class="form-control" id="partialName" placeholder="Enter name (or part of) to filter" maxlength="50">
+</div>
+<button class="btn btn-primary" (click)="onFilter()">Filter</button>
 
-<p *ngIf="(users| async)?.length == 0"><em>There are currently no Users in the system...</em></p>
+<p *ngIf="users.length == 0"><em>There are currently no Users in the system...</em></p>
 
 <table class='table'>
   <thead>
@@ -14,7 +22,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let user of users | async">
+    <tr *ngFor="let user of users">
       <td>
         <a routerLink="/user-edit/{{ user.id }}" routerLinkActive="active"><b>{{ user.id }}</b></a>
       </td>
