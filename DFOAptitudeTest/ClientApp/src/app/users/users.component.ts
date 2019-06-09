@@ -10,43 +10,48 @@ import { filter, map, tap } from 'rxjs/operators';
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
 })
+
 export class UsersComponent implements OnInit {
   users: User[] = [];
-  allUsers: User[];
+  allUsers: Observable<User[]>;
   update: boolean = false;
   nameFilter: string;
-  constructor(private service: UserService, private _route: ActivatedRoute) {
-    this.updateUsers();
-  }
-  onFilter() {
-    if (!this.nameFilter) { this.nameFilter = ""; }
-    this.users = [];
-    if (this.allUsers) {
-      this.allUsers.forEach((u) => {
-        if (u.name) {
-          if (!this.nameFilter || u.name.includes(this.nameFilter)) {
-            this.users.push(u);
-          }
+
+  constructor(private _service: UserService, private _route: ActivatedRoute) { }
+
+  filterByName(listUsers: User[], filterName?: string): User[] {
+    let filteredUsers: User[] = [];
+
+    if (filterName) {
+      listUsers.forEach(user => {
+        if (user.name.includes(filterName)) {
+          filteredUsers.push(user);
         }
       });
+    } else {
+      return listUsers;
     }
-  }
-  private updateUsers() {
-    this.service.getAll().subscribe((value) => {
-      this.allUsers = value;
-      console.debug(this.allUsers);
-      this.users = this.allUsers;
-      console.debug(this.users);
-    });
-  }
-  ngOnInit() {
-    //this._route.queryParams.pipe(
-    //  filter((params) => params.update)
-    //).subscribe((param) => {
-    //  if (param.update == 'true') {
-    //    this.updateUsers();
-    //  }
-    //})
+
+    return filteredUsers;
   }
 
+  onFilter() {
+    this.allUsers.pipe(tap(listUsers => {
+      this.users = this.filterByName(listUsers, this.nameFilter);
+    })).subscribe();
+  }
+
+  private getAllUsers() {
+    this._service.getAll().subscribe((value) => {
+      this.allUsers = of(value);
+      this.nameFilter = "";
+      this.allUsers.subscribe(all => this.users = this.filterByName(all));
+    });
+  }
+
+  ngOnInit() {
+    this.getAllUsers();
+    this._service.needsUpdate.subscribe(
+      need => { if (need) { console.trace("updated view"); this.getAllUsers(); this._service.updateComplete(); } });
+  }
 }

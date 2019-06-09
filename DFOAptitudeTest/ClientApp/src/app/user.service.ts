@@ -8,14 +8,14 @@ import { map, catchError, tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class UserService {
-  users: Observable<User[]>;
-
+  needsUpdate: Observable<boolean> = of(false);
   constructor(private _http: HttpClient, @Inject('BASE_URL') private _baseUrl: string) { }
 
+  updateComplete() { this.needsUpdate = of(false); }
   getAll(): Observable<User[]> {
     return this._http.get(this._baseUrl + "api/users/list").pipe(
       map((data) => <User[]>data),
-      tap((userData) => this.users = of(userData)),
+      tap((userData) => of(userData)),
       catchError(this.handleError));
   }
   getById(id: number | string): Observable<User> {
@@ -25,6 +25,7 @@ export class UserService {
       catchError(this.handleError));
   }
   createOrUpdate(user: User) {
+    this.needsUpdate = of(true);
     if (user.id == 0) {
       return this._http.post(this._baseUrl + "api/users/add", user).pipe(
         catchError(this.handleError));
