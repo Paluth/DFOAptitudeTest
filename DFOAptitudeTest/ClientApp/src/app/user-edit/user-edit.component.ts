@@ -17,7 +17,7 @@ export class UserEditComponent implements OnInit {
       id: ["0"],
       name: ["", [Validators.required, Validators.maxLength(50)]],
       age: ["", [Validators.required, Validators.pattern("[1-9][0-9]{0,2}")]],
-      adress: [""]
+      adress: ["", Validators.maxLength(50)]
     });
   constructor(
     private _builder: FormBuilder,
@@ -42,7 +42,7 @@ export class UserEditComponent implements OnInit {
     this.submitted = true;
     if (this.userForm.valid) {
       this.service.createOrUpdate(this.userForm.value).subscribe();
-      this._navigate.navigate(["../users"], { queryParams: { update: 'true' } });
+      this._navigate.navigate(["../users"]);
     }
   }
 
