@@ -45,13 +45,13 @@ export class UsersComponent implements OnInit {
     this._service.getAll().subscribe((value) => {
       this.allUsers = of(value);
       this.nameFilter = "";
-      this.allUsers.subscribe(all => this.users = this.filterByName(all));
+      this.allUsers.subscribe(all => { console.debug(all); this.users = this.filterByName(all); console.debug(this.users); });
+      
     });
   }
 
   ngOnInit() {
-    this.getAllUsers();
     this._service.needsUpdate.subscribe(
-      need => { if (need) { console.trace("updated view"); this.getAllUsers(); this._service.updateComplete(); } });
+      need => { if (need) { this.getAllUsers(); this._service.updateComplete(); } });
   }
 }

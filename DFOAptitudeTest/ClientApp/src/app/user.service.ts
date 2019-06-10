@@ -8,14 +8,15 @@ import { map, catchError, tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class UserService {
-  needsUpdate: Observable<boolean> = of(false);
+  needsUpdate: Observable<boolean> = of(true);
   constructor(private _http: HttpClient, @Inject('BASE_URL') private _baseUrl: string) { }
 
   updateComplete() { this.needsUpdate = of(false); }
   getAll(): Observable<User[]> {
+    console.trace("getAll");
     return this._http.get(this._baseUrl + "api/users/list").pipe(
-      map((data) => <User[]>data),
-      tap((userData) => of(userData)),
+      map(data => <User[]>data),
+      tap(userData => { console.debug(userData); of(userData) }),
       catchError(this.handleError));
   }
   getById(id: number | string): Observable<User> {
